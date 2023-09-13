@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, {useEffect, useRef} from 'react'
 import Container from '../Container'
 import {styled} from 'styled-components'
 
@@ -21,6 +21,7 @@ import {IoDiamond, IoGitMerge} from 'react-icons/io5'
 import {MdOutlineVilla} from 'react-icons/md'
 import CategoryBox from '../CategoryBox'
 import {usePathname, useSearchParams} from 'next/navigation'
+import {COLORS, DEVICES, SIZES} from '@/app/constants'
 
 export const CATEGORIES = [
   {
@@ -108,30 +109,79 @@ const Categories = () => {
 
   const isMainPage = pathname === '/'
 
+  const categoryRef = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    const scrollCategories = () => {
+      if (
+        document.body.scrollTop > 60 ||
+        document.documentElement.scrollTop > 60
+      ) {
+        categoryRef.current?.style.setProperty(
+          'box-shadow',
+          'rgba(0, 0, 0, 0.1) 0px 10px 15px -3px',
+        )
+        categoryRef.current?.style.setProperty('height', '80px')
+      } else {
+        categoryRef.current?.style.removeProperty('box-shadow')
+        categoryRef.current?.style.setProperty('height', '100px')
+      }
+    }
+    window.addEventListener('scroll', scrollCategories)
+    return () => {
+      window.removeEventListener('scroll', scrollCategories)
+    }
+  }, [])
+
   if (!isMainPage) return null
 
   return (
-    <Container>
-      <Wrapper>
-        {CATEGORIES.map(item => (
-          <CategoryBox
-            key={item.label}
-            label={item.label}
-            selected={category === item.label}
-            icon={item.icon}
-          />
-        ))}
-      </Wrapper>
-    </Container>
+    <Wrapper>
+      <StyledDiv ref={categoryRef}>
+        <Content>
+          {CATEGORIES.map(item => (
+            <CategoryBox
+              key={item.label}
+              label={item.label}
+              selected={category === item.label}
+              icon={item.icon}
+            />
+          ))}
+        </Content>
+      </StyledDiv>
+    </Wrapper>
   )
 }
 
 export default Categories
 
 const Wrapper = styled.div`
+  width: 100%;
+  background-color: ${COLORS.white};
+  margin-top: 2px;
+`
+
+const StyledDiv = styled.div`
   display: flex;
   flex: 1;
-  padding-top: 24px;
+  height: 100px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 80px;
+  padding-bottom: 8px;
+  transition: all 0.15s linear;
+
+  @media ${DEVICES.tablet} {
+    padding: 0 20px;
+  }
+`
+
+const Content = styled.div`
+  width: 100%;
+  height: 100%;
+  max-width: ${SIZES.desktop};
+  margin: auto;
+  display: flex;
+  flex: 1;
   flex-direction: row;
   gap: 12px;
   justify-content: space-between;

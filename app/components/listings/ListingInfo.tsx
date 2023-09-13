@@ -1,6 +1,6 @@
 'use client'
 
-import {COLORS} from '@/app/constants'
+import {COLORS, DEVICES} from '@/app/constants'
 import dynamic from 'next/dynamic'
 import useCountries from '@/app/hooks/useCountries'
 import {SafeUser} from '@/app/types'
@@ -80,6 +80,15 @@ export default ListingInfo
 const Wrapper = styled.div`
   width: 60%;
   padding-right: 100px;
+
+  @media ${DEVICES.laptopL} {
+    width: 50%;
+    padding-right: 48px;
+  }
+
+  @media ${DEVICES.tablet} {
+    width: 100%;
+  }
 `
 
 const StyledHost = styled.div`

@@ -10,7 +10,7 @@ import Button from '../Button'
 import {BsGrid3X3GapFill} from 'react-icons/bs'
 import HeartButton from '../HeartButton'
 import ShareButton from '../ShareButton'
-import {COLORS} from '@/app/constants'
+import {COLORS, DEVICES} from '@/app/constants'
 
 interface ListingHeadProps {
   id: string
@@ -32,12 +32,22 @@ const ListingHead: React.FC<ListingHeadProps> = ({
 
   return (
     <Wrapper>
-      <Heading
-        title={title}
-        subtitle={`${location?.region}, ${location?.label}`}
-      />
+      <MediaQuery>
+        <Heading
+          title={title}
+          subtitle={`${location?.region}, ${location?.label}`}
+        />
+      </MediaQuery>
       <Images>
-        {images.slice(0, 5).map(item => (
+        <FirstImage>
+          <Image
+            src={images[0]}
+            fill
+            className="object-cover w-full"
+            alt="Image"
+          />
+        </FirstImage>
+        {images.slice(1, 5).map(item => (
           <StyledImage key={item}>
             <Image
               src={item}
@@ -79,8 +89,23 @@ const Images = styled.div`
   margin-top: 32px;
   position: relative;
 
-  & > :first-child {
-    grid-column: 1 / span 2;
+  @media ${DEVICES.laptop} {
+    height: 40vh;
+  }
+
+  @media ${DEVICES.tablet} {
+    height: 35vh;
+  }
+`
+
+const FirstImage = styled.div`
+  position: relative;
+  cursor: pointer;
+  grid-column: 1 / span 2;
+  grid-row: 1 / span 2;
+
+  @media ${DEVICES.mobileL} {
+    grid-column: 1 / span 4;
     grid-row: 1 / span 2;
   }
 `
@@ -88,6 +113,10 @@ const Images = styled.div`
 const StyledImage = styled.div`
   position: relative;
   cursor: pointer;
+
+  @media ${DEVICES.mobileL} {
+    display: none;
+  }
 `
 
 const StyledButton = styled.div`
@@ -95,4 +124,10 @@ const StyledButton = styled.div`
   position: absolute;
   bottom: 32px;
   right: 32px;
+`
+
+const MediaQuery = styled.div`
+  @media ${DEVICES.tablet} {
+    max-width: 80%;
+  }
 `

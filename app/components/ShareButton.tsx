@@ -2,7 +2,7 @@
 
 import React from 'react'
 import {styled} from 'styled-components'
-import {COLORS} from '../constants'
+import {COLORS, DEVICES} from '../constants'
 import {IoMdShare} from 'react-icons/io'
 
 const ShareButton = () => {
@@ -27,6 +27,10 @@ const Wrapper = styled.div`
 
   &:hover {
     opacity: 0.7;
+  }
+
+  @media ${DEVICES.tablet} {
+    right: 48px;
   }
 `
 

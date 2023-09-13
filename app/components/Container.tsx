@@ -1,7 +1,7 @@
 'use client'
 
 import {styled} from 'styled-components'
-import {SIZES} from '../constants'
+import {DEVICES, SIZES} from '../constants'
 
 interface ContainerProps {
   children: React.ReactNode
@@ -14,7 +14,11 @@ const Container: React.FC<ContainerProps> = ({children}) => {
 export default Container
 
 const Wrapper = styled.div`
-  display: flex;
   max-width: ${SIZES.desktop};
   padding: 0 80px;
+  margin: auto;
+
+  @media ${DEVICES.tablet} {
+    padding: 0 20px;
+  }
 `

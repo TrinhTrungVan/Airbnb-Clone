@@ -1,6 +1,6 @@
 'use client'
 
-import {COLORS} from '@/app/constants'
+import {COLORS, DEVICES} from '@/app/constants'
 import {BiSearch} from 'react-icons/bi'
 import {styled} from 'styled-components'
 import Line from '../Line'
@@ -55,11 +55,19 @@ const Search = () => {
   return (
     <Wrapper onClick={() => searchModal.onOpen()}>
       <StyledButton bold>{locationLabel}</StyledButton>
-      <Line direction="vertical" width={24} />
-      <StyledButton bold>{durationLabel}</StyledButton>
-      <Line direction="vertical" width={24} />
+      <MediaQuery>
+        <Line direction="vertical" width={24} />
+      </MediaQuery>
+      <MediaQuery>
+        <StyledButton bold>{durationLabel}</StyledButton>
+      </MediaQuery>
+      <MediaQuery>
+        <Line direction="vertical" width={24} />
+      </MediaQuery>
       <SearchWrapper>
-        <StyledButton>{guestLabel}</StyledButton>
+        <MediaQuery>
+          <StyledButton>{guestLabel}</StyledButton>
+        </MediaQuery>
         <SearchIcon>
           <BiSearch size={18} />
         </SearchIcon>
@@ -85,6 +93,11 @@ const Wrapper = styled.div`
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.18);
   }
   transition: box-shadow 0.2s cubic-bezier(0.2, 0, 0, 1);
+
+  @media ${DEVICES.tablet} {
+    flex: 1;
+    margin-right: 8px;
+  }
 `
 
 const StyledButton = styled.div<{bold?: boolean}>`
@@ -96,6 +109,10 @@ const StyledButton = styled.div<{bold?: boolean}>`
   color: ${props => (props.bold ? COLORS.text : COLORS.textBlur)};
   user-select: none;
   cursor: pointer;
+
+  @media ${DEVICES.tablet} {
+    flex: 1;
+  }
 `
 
 const SearchWrapper = styled.div`
@@ -103,6 +120,14 @@ const SearchWrapper = styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: center;
+
+  @media ${DEVICES.tablet} {
+    flex: 1;
+  }
+
+  @media ${DEVICES.mobileL} {
+    flex: 0;
+  }
 `
 
 const SearchIcon = styled.div`
@@ -116,4 +141,14 @@ const SearchIcon = styled.div`
   align-items: center;
   margin-right: 8px;
   cursor: pointer;
+`
+
+const MediaQuery = styled.div`
+  @media ${DEVICES.tablet} {
+    flex: 1;
+  }
+
+  @media ${DEVICES.mobileL} {
+    display: none;
+  }
 `

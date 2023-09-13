@@ -1,19 +1,20 @@
 'use client'
 
-import React, {useCallback, useState} from 'react'
-import {RiGlobalLine} from 'react-icons/ri'
-import {AiOutlineMenu} from 'react-icons/ai'
-import Avatar from '../Avatar'
-import MenuItem from './MenuItem'
-import {styled} from 'styled-components'
-import {COLORS} from '@/app/constants'
-import Line from '../Line'
-import useRegisterModal from '@/app/hooks/useRegisterModal'
+import {COLORS, DEVICES} from '@/app/constants'
 import useLoginModal from '@/app/hooks/useLoginModal'
-import {signOut} from 'next-auth/react'
+import useRegisterModal from '@/app/hooks/useRegisterModal'
 import useRentModal from '@/app/hooks/useRentModal'
 import {SafeUser} from '@/app/types'
+import Tippy from '@tippyjs/react'
+import {signOut} from 'next-auth/react'
 import {useRouter} from 'next/navigation'
+import React, {useCallback, useState} from 'react'
+import {AiOutlineMenu} from 'react-icons/ai'
+import {RiGlobalLine} from 'react-icons/ri'
+import {styled} from 'styled-components'
+import Avatar from '../Avatar'
+import Line from '../Line'
+import MenuItem from './MenuItem'
 
 interface UserMenuProps {
   currentUser?: SafeUser | null
@@ -24,11 +25,12 @@ const UserMenu: React.FC<UserMenuProps> = ({currentUser}) => {
   const registerModal = useRegisterModal()
   const loginModal = useLoginModal()
   const rentModal = useRentModal()
-  const [isOpen, setIsOpen] = useState(false)
 
-  const toggleOpen = () => {
-    setIsOpen(value => !value)
+  const [visible, setVisible] = useState(false)
+  const toggle = () => {
+    setVisible(prev => !prev)
   }
+  const hide = () => setVisible(false)
 
   const onRent = useCallback(() => {
     if (!currentUser) {
@@ -45,47 +47,56 @@ const UserMenu: React.FC<UserMenuProps> = ({currentUser}) => {
       <ChangeLanguageBtn>
         <RiGlobalLine size={20} />
       </ChangeLanguageBtn>
-      <Menu onClick={toggleOpen}>
-        <MenuIcon>
-          <AiOutlineMenu size={18} />
-        </MenuIcon>
-        <Avatar src={currentUser?.image} />
-      </Menu>
-      {isOpen && (
-        <StyledMenu>
-          {currentUser ? (
-            <>
-              <MenuItem
-                onClick={() => router.push('/trips')}
-                label="My trips"
-              />
-              <MenuItem
-                onClick={() => router.push('/favourites')}
-                label="My favourites"
-              />
-              <MenuItem
-                onClick={() => router.push('/reservations')}
-                label="My reservations"
-              />
-              <MenuItem
-                onClick={() => router.push('/properties')}
-                label="My properties"
-              />
-              <MenuItem onClick={onRent} label="Airbnb your home" />
-              <Line />
-              <MenuItem onClick={() => signOut()} label="Logout" bold />
-            </>
-          ) : (
-            <>
-              <MenuItem onClick={registerModal.onOpen} label="Sign up" bold />
-              <MenuItem onClick={loginModal.onOpen} label="Log in" />
-              <Line />
-              <MenuItem onClick={() => {}} label="Airbnb your home" />
-              <MenuItem onClick={() => {}} label="Help Center" />
-            </>
-          )}
-        </StyledMenu>
-      )}
+      <Tippy
+        visible={visible}
+        placement="bottom-end"
+        interactive={true}
+        interactiveDebounce={0}
+        onClickOutside={hide}
+        content={
+          <StyledMenu onClick={hide}>
+            {currentUser ? (
+              <>
+                <MenuItem
+                  onClick={() => router.push('/trips')}
+                  label="My trips"
+                />
+                <MenuItem
+                  onClick={() => router.push('/favourites')}
+                  label="My favourites"
+                />
+                <MenuItem
+                  onClick={() => router.push('/reservations')}
+                  label="My reservations"
+                />
+                <MenuItem
+                  onClick={() => router.push('/properties')}
+                  label="My properties"
+                />
+                <MenuItem onClick={onRent} label="Airbnb your home" />
+                <Line />
+                <MenuItem onClick={() => signOut()} label="Logout" bold />
+              </>
+            ) : (
+              <>
+                <MenuItem onClick={registerModal.onOpen} label="Sign up" bold />
+                <MenuItem onClick={loginModal.onOpen} label="Log in" />
+                <Line />
+                <MenuItem onClick={rentModal.onOpen} label="Airbnb your home" />
+                <MenuItem onClick={() => {}} label="Help Center" />
+              </>
+            )}
+          </StyledMenu>
+        }>
+        <Menu onClick={toggle}>
+          <MenuIcon>
+            <AiOutlineMenu size={18} />
+          </MenuIcon>
+          <StyledAvatar>
+            <Avatar src={currentUser?.image} />
+          </StyledAvatar>
+        </Menu>
+      </Tippy>
     </Wrapper>
   )
 }
@@ -96,13 +107,9 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  position: relative;
 `
 
 const StyledMenu = styled.div`
-  position: absolute;
-  top: 48px;
-  right: 0;
   background-color: ${COLORS.white};
   box-shadow: 0 2px 16px rgba(0, 0, 0, 0.12);
   border-radius: 12px;
@@ -123,6 +130,10 @@ const StyledButton = styled.div`
   &:hover {
     background-color: ${COLORS.backgroundHover};
   }
+
+  @media ${DEVICES.laptop} {
+    display: none;
+  }
 `
 
 const ChangeLanguageBtn = styled(StyledButton)`
@@ -134,6 +145,10 @@ const ChangeLanguageBtn = styled(StyledButton)`
   justify-content: center;
   align-items: center;
   padding: 0;
+
+  @media ${DEVICES.laptop} {
+    display: none;
+  }
 `
 
 const Menu = styled.div`
@@ -158,4 +173,16 @@ const MenuIcon = styled.div`
   align-items: center;
   margin: 0 8px;
   padding-right: 4px;
+
+  @media ${DEVICES.tablet} {
+    padding: 8px 0;
+  }
+`
+
+const StyledAvatar = styled.div`
+  height: 30px;
+
+  @media ${DEVICES.tablet} {
+    display: none;
+  }
 `

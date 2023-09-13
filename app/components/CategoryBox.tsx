@@ -65,7 +65,7 @@ const Wrapper = styled.div<{selected?: boolean}>`
   justify-content: center;
   align-items: center;
   gap: 12px;
-  padding: 12px;
+  padding: 0 12px 8px;
   cursor: pointer;
   color: ${props => (props.selected ? COLORS.text : COLORS.textBlur)};
   border-bottom: 3px solid;

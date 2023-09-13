@@ -115,7 +115,7 @@ const Wrapper = styled.div<{showModal: any}>`
   background-color: ${COLORS.white};
   width: 100%;
   max-width: 568px;
-  margin: 32px 0;
+  margin: 32px 20px;
   border-radius: 12px;
   opacity: ${props => (props.showModal ? 1 : 0)};
   translate: 0 ${props => (props.showModal ? 0 : '100%')};

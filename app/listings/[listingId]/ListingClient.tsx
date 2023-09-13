@@ -5,6 +5,7 @@ import ListingHead from '@/app/components/listings/ListingHead'
 import ListingInfo from '@/app/components/listings/ListingInfo'
 import ListingReservation from '@/app/components/listings/ListingReservation'
 import {CATEGORIES} from '@/app/components/navbar/Categories'
+import {DEVICES, SIZES} from '@/app/constants'
 import useLoginModal from '@/app/hooks/useLoginModal'
 import {SafeListing, SafeReservation, SafeUser} from '@/app/types'
 import axios from 'axios'
@@ -136,10 +137,19 @@ export default ListingClient
 
 const Wrapper = styled.div`
   width: 100%;
+  max-width: ${SIZES.laptopL};
+  margin: auto;
 `
 
 const StyledDiv = styled.div`
   display: flex;
   flex-direction: row;
   margin-top: 32px;
+
+  @media ${DEVICES.tablet} {
+    flex-direction: column;
+  }
+
+  @media ${DEVICES.mobileL} {
+  }
 `

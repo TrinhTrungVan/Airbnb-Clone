@@ -27,7 +27,7 @@ const Home = async ({searchParams}: HomeProps) => {
   return (
     <ClientOnly>
       <Container>
-        <div style={wrapperStyles}>
+        <div id="grid-layout">
           {listings.map(listing => {
             return (
               <ListingCard
@@ -44,11 +44,3 @@ const Home = async ({searchParams}: HomeProps) => {
 }
 
 export default Home
-
-const wrapperStyles: CSSProperties = {
-  display: 'grid',
-  gridTemplateColumns: 'repeat(4, 1fr)',
-  gap: 32,
-  width: '100%',
-  paddingTop: 100,
-}

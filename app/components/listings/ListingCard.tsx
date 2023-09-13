@@ -70,7 +70,9 @@ const ListingCard: React.FC<ListingCardProps> = ({
   }, [reservation])
 
   return (
-    <Wrapper onClick={() => router.push(`/listings/${data.id}`)}>
+    <Wrapper
+      onClick={() => router.push(`/listings/${data.id}`)}
+      hasButton={!!onAction && !!actionLabel}>
       <StyledImage>
         <Slider data={data.images.slice(0, 5)} />
         <HeartButton listingId={data.id} currentUser={currentUser} />
@@ -97,9 +99,10 @@ const ListingCard: React.FC<ListingCardProps> = ({
 
 export default ListingCard
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{hasButton: boolean}>`
   cursor: pointer;
   position: relative;
+  margin-bottom: ${props => (props.hasButton ? '150px' : '100px')};
 `
 
 const StyledImage = styled.div`
