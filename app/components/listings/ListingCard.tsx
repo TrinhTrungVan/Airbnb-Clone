@@ -103,6 +103,7 @@ const Wrapper = styled.div<{hasButton: boolean}>`
   cursor: pointer;
   position: relative;
   margin-bottom: ${props => (props.hasButton ? '150px' : '100px')};
+  min-width: 0;
 `
 
 const StyledImage = styled.div`
